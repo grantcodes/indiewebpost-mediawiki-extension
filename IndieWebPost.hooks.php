@@ -61,7 +61,8 @@ class IndieWebPost {
       $mf2 = MF2\parse($html);
 
       if ($mf2 && $mf2['items'] && 1 === count($mf2['items'])) {
-        $pre = '<pre class="brush: js">' . str_replace(' ', '&nbsp;', htmlentities(json_encode( $mf2['items'][0], JSON_PRETTY_PRINT ))) . '</pre>';
+        // Needs the new lines to avoid mediawiki markup junk
+        $pre = "\n\n" . '<pre class="brush: js">' . htmlentities( json_encode( $mf2['items'][0], JSON_PRETTY_PRINT ) ) . '</pre>' . "\n\n";
         $output .= '<div class="indiewebpost__tab">';
           $output .= '<h4 class="indiewebpost__tab__title">Parsed MF2 JSON</h4>';
           $output .= '<div class="indiewebpost__tab__code">' . $pre . '</div>';
