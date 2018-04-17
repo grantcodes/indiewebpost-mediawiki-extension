@@ -1,0 +1,45 @@
+{
+	"name": "IndieWeb Post",
+	"version": "1.0",
+	"author": [
+		"Grant Richmond"
+	],
+	"url": "https://grant.codes",
+	"descriptionmsg": "indiewebpost_description",
+	"license-name": "MIT",
+	"type": "parserhook",
+	"requires": {
+		"MediaWiki": ">= 1.27.0"
+	},
+	"MessagesDirs": {
+		"IndieWebPost": [
+			"i18n"
+		]
+	},
+	"ExtensionMessagesFiles": {
+		"IndieWebPostMagic": "IndieWebPost.i18n.magic.php"
+	},
+	"AutoloadClasses": {
+		"IndieWebPost": "IndieWebPost.hooks.php"
+	},
+	"ResourceModules": {
+		"ext.indiewebpost": {
+			"styles": [
+				"indiewebpost.css"
+			],
+			"scripts": [
+				"mw.IndieWebPost.js"
+			]
+		}
+	},
+	"ResourceFileModulePaths": {
+		"localBasePath": "resources",
+		"remoteExtPath": "IndieWebPost/resources"
+	},
+	"Hooks": {
+		"ParserFirstCallInit": [
+			"IndieWebPost::onParserFirstCallInit"
+		]
+	},
+	"manifest_version": 1
+}

@@ -1,0 +1,9 @@
+{
+	"@metadata": {
+		"authors": [
+			"Grant Richmond"
+		]
+	},
+	"indiewebpost": "IndieWebPost",
+	"indiewebpost_description": "IndieWebPost Tag - &lt;indiewebpost &gt;&lt;/indiewebpost&gt;"
+}
