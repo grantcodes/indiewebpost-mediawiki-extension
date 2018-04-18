@@ -1,3 +1,44 @@
+// Create the tabs
+
+(function () {
+  var codeTabContainers = document.querySelectorAll('.indiewebpost');
+  codeTabContainers.forEach(function(container) {
+    if (!container.classList.contains('is-tabbed')) {
+      container.classList.add('is-tabbed');
+      var tabs = container.querySelectorAll('.indiewebpost__tab');
+      var nav = document.createElement('div');
+      nav.className = 'indiewebpost__nav';
+      tabs.forEach(function(tab, tabIndex) {
+        var title = tab.querySelector('.indiewebpost__tab__title');
+        var code = tab.querySelector('.indiewebpost__tab__code');
+        code.classList.add('is-hidden');
+        title.remove();
+        title.addEventListener('click', function(e) {
+          container
+            .querySelectorAll('.indiewebpost__tab__code')
+            .forEach(function(tmpCode) {
+              tmpCode.classList.add('is-hidden');
+            });
+          container
+            .querySelectorAll('.indiewebpost__tab__title')
+            .forEach(function(tmpTitle) {
+              tmpTitle.classList.remove('is-selected');
+            });
+          title.classList.add('is-selected');
+          code.classList.remove('is-hidden');
+        });
+        if (tabIndex === 0) {
+          title.classList.add('is-selected');
+          code.classList.remove('is-hidden');
+        }
+        nav.appendChild(title);
+      });
+      container.insertBefore(nav, tabs[0]);
+    }
+  });
+})();
+
+// Syntax Highlighter
 /*!
  * SyntaxHighlighter
  * https://github.com/syntaxhighlighter/syntaxhighlighter
@@ -3823,42 +3864,3 @@
 
 /***/ })
 /******/ ]);
-
-
-(function () {
-  var codeTabContainers = document.querySelectorAll('.indiewebpost');
-  codeTabContainers.forEach(function(container) {
-    if (!container.classList.contains('is-tabbed')) {
-      container.classList.add('is-tabbed');
-      var tabs = container.querySelectorAll('.indiewebpost__tab');
-      var nav = document.createElement('div');
-      nav.className = 'indiewebpost__nav';
-      tabs.forEach(function(tab, tabIndex) {
-        var title = tab.querySelector('.indiewebpost__tab__title');
-        var code = tab.querySelector('.indiewebpost__tab__code');
-        code.classList.add('is-hidden');
-        title.remove();
-        title.addEventListener('click', function(e) {
-          container
-            .querySelectorAll('.indiewebpost__tab__code')
-            .forEach(function(tmpCode) {
-              tmpCode.classList.add('is-hidden');
-            });
-          container
-            .querySelectorAll('.indiewebpost__tab__title')
-            .forEach(function(tmpTitle) {
-              tmpTitle.classList.remove('is-selected');
-            });
-          title.classList.add('is-selected');
-          code.classList.remove('is-hidden');
-        });
-        if (tabIndex === 0) {
-          title.classList.add('is-selected');
-          code.classList.remove('is-hidden');
-        }
-        nav.appendChild(title);
-      });
-      container.insertBefore(nav, tabs[0]);
-    }
-  });
-})();

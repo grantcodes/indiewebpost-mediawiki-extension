@@ -5,5 +5,9 @@
 		]
 	},
 	"indiewebpost": "IndieWebPost",
-	"indiewebpost_description": "IndieWebPost Tag - &lt;indiewebpost &gt;&lt;/indiewebpost&gt;"
+	"indiewebpost_description": "IndieWebPost Tag - &lt;indiewebpost &gt;&lt;/indiewebpost&gt;",
+	"indiewebpost_error_default": "There was an error with that post",
+	"indiewebpost_error_nohtml": "You need to provide the html for the post",
+	"indiewebpost_error_decodemicropub": "Error decoding the micropub json",
+	"indiewebpost_error_mf2parser": "There was an error with the mf2 parser"
 }

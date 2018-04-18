@@ -33,47 +33,79 @@ class IndieWebPost {
    * @return	array	HTML
    */
   static public function indieWebPostMagicWord( Parser &$parser, PPFrame $frame, array $args ) {
-    $params = self::extractOptions( $args, $frame );
+    // Loads the js and css
     $parser->getOutput()->addModules( 'ext.indiewebpost' );
-    $html = $params['html'];
-    $output	=	"<div class='indiewebpost'>";
-    if ($html) {
-      $output .= '<div class="indiewebpost__tab">';
-        $output .= '<h4 class="indiewebpost__tab__title">Rendered HTML</h4>';
-        $output .= '<div class="indiewebpost__tab__code">' . $html . '</div>';
-      $output .= '</div>';
+    // Assign variables
+    $params = self::extractOptions( $args, $frame );
+
+    if (!isset($params['html'])) {
+      return self::err('nohtml');
     }
-    // $mf2 = self::getMF2($output);
-    // if (!$mf2) {
-    //   return self::err('mf2-parsing');
-    // }
 
+    $hiddenTabs = array();
+    if (isset($params['hide-tabs'])) {
+      $hiddenTabs = explode(',', $params['hide-tabs']);
+    }
 
-      if ($html) {
-        //  $pre = $hl->highlight('html', $html);
-         $pre = '<pre class="brush: xml">' . htmlentities($html) . '</pre>';
-        $output .= '<div class="indiewebpost__tab">';
-          $output .= '<h4 class="indiewebpost__tab__title">HTML Markup</h4>';
-          $output .= '<div class="indiewebpost__tab__code">' . $pre . '</div>';
-        $output .= '</div>';
+    $output	=	"<div class='indiewebpost'>";
+
+    if (!in_array('html', $hiddenTabs)) {
+      $htmlPre = self::getCodeBlock($params['html'], 'html');
+      $output .= self::getTab('HTML+mf2', $htmlPre);
+    }
+
+    $mf2 = MF2\parse($params['html']);
+    if ($mf2 && $mf2['items'] && 1 === count($mf2['items'])) {
+      if (!in_array('mf2', $hiddenTabs)) {
+        $json = json_encode($mf2['items'][0], JSON_PRETTY_PRINT);
+        $mf2Pre = self::getCodeBlock($json, 'json');
+        $output .= self::getTab('mf2 JSON', $mf2Pre);
       }
+    } else {
+      return self::err('mf2parser');
+    }
 
-      $mf2 = MF2\parse($html);
-
-      if ($mf2 && $mf2['items'] && 1 === count($mf2['items'])) {
-        // Needs the new lines to avoid mediawiki markup junk
-        $pre = "\n\n" . '<pre class="brush: js">' . htmlentities( json_encode( $mf2['items'][0], JSON_PRETTY_PRINT ) ) . '</pre>' . "\n\n";
-        $output .= '<div class="indiewebpost__tab">';
-          $output .= '<h4 class="indiewebpost__tab__title">Parsed MF2 JSON</h4>';
-          $output .= '<div class="indiewebpost__tab__code">' . $pre . '</div>';
-        $output .= '</div>';
+    if (!in_array('micropub', $hiddenTabs)) {
+      $micropub = $mf2['items'][0];
+      if (isset($params['micropub'])) {
+        $micropub = json_decode($params['micropub']);
+        if (!$micropub) {
+          return self::err('decodemicropub');
+        }
+        $micropub = json_encode($micropub, JSON_PRETTY_PRINT);
+      } else {
+        // Simplify the content property by default
+        if (isset($micropub['properties']['content'])) {
+          foreach($micropub['properties']['content'] as $i => $content) {
+            if (is_array($content) && isset($content['value'])) {
+              $micropub['properties']['content'][$i] = $content['value'];
+            }
+          }
+        }
+        // Remove name property if it is the same as the content
+        if (isset($micropub['properties']['content'][0]) && isset($micropub['properties']['name'][0]) && $micropub['properties']['content'][0] == $micropub['properties']['name'][0]) {
+          unset($micropub['properties']['name']);
+        }
+        $micropub = json_encode($micropub, JSON_PRETTY_PRINT);
       }
+      $micropubPre = self::getCodeBlock($micropub, 'json');
+      $output .= self::getTab('Micropub JSON', $micropubPre);
+    }
+
+    if (isset($params['screenshot'])) {
+      $screenshot = '<img src="' . $params['screenshot'] .'" alt="Screenshot of a indieweb post" />';
+      if (isset($params['screenshot-title'])) {
+        $screenshot = $screenshot . '<h5>' . $params['screenshot-title'] . '</h5>';
+      }
+      $output .= self::getTab('Screenshot', $screenshot);
+    }
+
+    if (!in_array('rendered', $hiddenTabs)) {
+      $output .= self::getTab('Rendered', $params['html'] . '<p><small>Note: This is displayed using the default wiki css</small></p>');
+    }
 
     $output .= '</div>';
-    // return [
-    //   'text' => $output,
-    //   'noparse' => true
-    // ];
+
     return array(
       'text' => $output,
       'noparse' => true,
@@ -99,5 +131,28 @@ class IndieWebPost {
       }
     }
     return $results;
+  }
+
+  static function err(string $errorString = 'default') {
+    return '<div class="errorbox">' . wfMessage('indiewebpost_error_' . $errorString)->text() . '</div>';
+  }
+
+  static function getTab(string $title, string $content) {
+    $tab = '<div class="indiewebpost__tab">';
+    $tab .= '<h4 class="indiewebpost__tab__title">' . $title . '</h4>';
+    $tab .= '<div class="indiewebpost__tab__code">' . $content . '</div>';
+    $tab .= '</div>';
+    return $tab;
+  }
+
+  static function getCodeBlock(string $code, string $type) {
+    if ($type == 'html') {
+      return '<pre class="brush: xml">' . htmlentities($code) . '</pre>';
+    }
+    if ($type == 'json') {
+      // Needs the new lines to avoid mediawiki markup junk
+      return "\n\n" . '<pre class="brush: js">' . htmlentities($code) . '</pre>' . "\n\n";
+    }
+    return '<pre class="">' . htmlentities($code) . '</pre>';
   }
 }
