@@ -6,11 +6,13 @@ This is an extension to render indieweb friendly posts in a variety of formats
 
 ### Basic
 
-  {{#indiewebpost:html=<div class="h-entry">
-    <div class="e-content">
-      <p>A super basic note</p>
-    </div>
-  </div>}}
+```
+{{#indiewebpost:html=<div class="h-entry">
+  <div class="e-content">
+    <p>A super basic note</p>
+  </div>
+</div>}}
+```
 
 You must include html for the post you want to display.
 
@@ -20,13 +22,15 @@ By default the extension will show the html you provided, parsed mf2 JSON, examp
 
 You can add a screenshot with an example of the post with improved styles, as well as an optional title for the screenshot:
 
-  {{#indiewebpost:html=<div class="h-entry">
-    <div class="e-content">
-      <p>A super basic note</p>
-    </div>
+```
+{{#indiewebpost:html=<div class="h-entry">
+  <div class="e-content">
+    <p>A super basic note</p>
   </div>
-  |screenshot=http://example.com/screenshot.jpg
-  |screenshot-title=The example screenshot}}
+</div>
+|screenshot=http://example.com/screenshot.jpg
+|screenshot-title=The example screenshot}}
+```
 
 ### Hiding Tabs
 
@@ -34,12 +38,14 @@ You can hide tabs using the `hide-tabs` param and adding a comma seperated list 
 
 Available options are `html`, `mf2`, `micropub` and `rendered`.
 
-  {{#indiewebpost:html=<div class="h-entry">
-    <div class="e-content">
-      <p>A super basic note</p>
-    </div>
+```
+{{#indiewebpost:html=<div class="h-entry">
+  <div class="e-content">
+    <p>A super basic note</p>
   </div>
-  |hide-tabs=rendered,micropub}
+</div>
+|hide-tabs=rendered,micropub}
+```
 
 ### Replacing Micropub JSON
 
@@ -47,15 +53,17 @@ Since a micropub request can be different to the parsed mf2 there is the option 
 
 Just be careful with MediaWiki formatting, as it can cause some issues...
 
-  {{#indiewebpost:html=<div class="h-entry">
-    <div class="e-content">
-      <p>A super basic note</p>
-    </div>
+```
+{{#indiewebpost:html=<div class="h-entry">
+  <div class="e-content">
+    <p>A super basic note</p>
   </div>
-  |micropub={
-    "type": ["h-entry"],
-    "properties": {
-      "content": ["micropub content"]
-    }
+</div>
+|micropub={
+  "type": ["h-entry"],
+  "properties": {
+    "content": ["micropub content"]
   }
-  }}
+}
+}}
+```
