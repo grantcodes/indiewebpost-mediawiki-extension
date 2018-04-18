@@ -7,7 +7,7 @@ This is an extension to render indieweb friendly posts in a variety of formats
 ### Basic
 
 ```
-{{#indiewebpost:html=<div class="h-entry">
+{{#mf2tabs:html=<div class="h-entry">
   <div class="e-content">
     <p>A super basic note</p>
   </div>
@@ -23,7 +23,7 @@ By default the extension will show the html you provided, parsed mf2 JSON, examp
 You can add a screenshot with an example of the post with improved styles, as well as an optional title for the screenshot:
 
 ```
-{{#indiewebpost:html=<div class="h-entry">
+{{#mf2tabs:html=<div class="h-entry">
   <div class="e-content">
     <p>A super basic note</p>
   </div>
@@ -39,7 +39,7 @@ You can hide tabs using the `hide-tabs` param and adding a comma seperated list 
 Available options are `html`, `mf2`, `micropub` and `rendered`.
 
 ```
-{{#indiewebpost:html=<div class="h-entry">
+{{#mf2tabs:html=<div class="h-entry">
   <div class="e-content">
     <p>A super basic note</p>
   </div>
@@ -54,7 +54,7 @@ Since a micropub request can be different to the parsed mf2 there is the option 
 Just be careful with MediaWiki formatting, as it can cause some issues...
 
 ```
-{{#indiewebpost:html=<div class="h-entry">
+{{#mf2tabs:html=<div class="h-entry">
   <div class="e-content">
     <p>A super basic note</p>
   </div>

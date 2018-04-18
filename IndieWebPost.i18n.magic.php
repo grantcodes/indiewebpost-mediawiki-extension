@@ -10,5 +10,5 @@
 $magicWords = [];
 
 $magicWords['en'] = [
-	'indiewebpost' => [ 0, 'indiewebpost' ]
+	'indiewebpost' => [ 0, 'indiewebpost', 'mf2tabs' ],
 ];
